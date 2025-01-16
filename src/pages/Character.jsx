@@ -9,22 +9,21 @@ import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import Divider from "@mui/material/Divider"; // Adding Divider for better separation of sections
-import Chip from "@mui/material/Chip"; // Optional Chip for enhanced presentation of sections
+import Divider from "@mui/material/Divider";
+import Chip from "@mui/material/Chip";
 import Link from "@mui/material/Link";
-
+import { Grid } from "@mui/material"; // Import Grid for layout
 
 export default function Character() {
   const location = useLocation();
-  const { character } = location.state || {}; // Destructure the character data from the state passed via Link
+  const { character } = location.state || {};
 
-  console.log(character); // Logs the character data for debugging
+  console.log(character);
 
   if (!character) {
     return <div>No character data available.</div>;
   }
 
-  // Limit the number of items to 3 for comics, series, and stories
   const comicsList = character.comics?.items.slice(0, 3) || [];
   const seriesList = character.series?.items.slice(0, 3) || [];
   const storiesList = character.stories?.items.slice(0, 3) || [];
@@ -33,12 +32,13 @@ export default function Character() {
     <div>
       <Card
         sx={{
-          maxWidth: 800, // Adjusted for the horizontal layout
+          maxWidth: 800,
           borderRadius: 2,
           margin: "20px auto",
           boxShadow: 3,
           padding: 2,
-          display: "flex", // Use flexbox for horizontal layout
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" }, // Make the layout stack vertically on small screens
         }}
       >
         <Box sx={{ flex: 1, paddingRight: 2 }}>
@@ -47,7 +47,11 @@ export default function Character() {
             height="300"
             image={`${character.thumbnail.path}.${character.thumbnail.extension}`}
             alt={character.name}
-            sx={{ objectFit: "cover", borderRadius: "8px" }}
+            sx={{
+              objectFit: "cover",
+              borderRadius: "8px",
+              width: "100%", // Ensure image is responsive
+            }}
           />
         </Box>
         <CardContent sx={{ flex: 2 }}>
@@ -55,11 +59,14 @@ export default function Character() {
             gutterBottom
             variant="h5"
             component="div"
-            sx={{ fontWeight: "bold", textAlign: "center" }}
+            sx={{
+              fontWeight: "bold",
+              textAlign: "center",
+              fontSize: { xs: "1.5rem", sm: "2rem" }, // Responsive font size
+            }}
           >
             {character.name}
           </Typography>
-          {/* Modified Date */}
           <Typography
             variant="body2"
             sx={{ color: "text.secondary", textAlign: "center" }}
@@ -68,75 +75,71 @@ export default function Character() {
               ? new Date(character.modified).toLocaleDateString()
               : "No modification date available."}
           </Typography>
-          <Divider sx={{ my: 2 }} /> {/* Divider between sections */}
-          {/* Description */}
+          <Divider sx={{ my: 2 }} />
           <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
             {character.description || "No description available."}
           </Typography>
-          <Divider sx={{ my: 2 }} /> {/* Divider between sections */}
-          {/* Comics */}
+          <Divider sx={{ my: 2 }} />
+
           {comicsList.length > 0 && (
             <>
               <Chip label="Comics" color="primary" sx={{ mb: 1 }} />
-              <Box display="flex" justifyContent="space-between" sx={{ mb: 2 }}>
+              <Grid container spacing={2} sx={{ mb: 2 }}>
                 {comicsList.map((comic, index) => (
-                  <Box key={index} sx={{ flex: 1, textAlign: "center" }}>
-                    <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                      {comic.name}
-                    </Typography>
-                    <Link
-                      variant="body2"
-                        underline="none"
-                    >
-                      More Info
-                    </Link>
-                  </Box>
+                  <Grid item xs={12} sm={4} key={index}>
+                    <Box sx={{ textAlign: "center" }}>
+                      <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                        {comic.name}
+                      </Typography>
+                      <Link variant="body2" underline="none">
+                        More Info
+                      </Link>
+                    </Box>
+                  </Grid>
                 ))}
-              </Box>
+              </Grid>
               <Divider sx={{ my: 2 }} />
             </>
           )}
-          {/* Series */}
+
           {seriesList.length > 0 && (
             <>
               <Chip label="Series" color="secondary" sx={{ mb: 1 }} />
-              <Box display="flex" justifyContent="space-between" sx={{ mb: 2 }}>
+              <Grid container spacing={2} sx={{ mb: 2 }}>
                 {seriesList.map((series, index) => (
-                  <Box key={index} sx={{ flex: 1, textAlign: "center" }}>
-                    <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                      {series.name}
-                    </Typography>
-                    <Link
-                      variant="body2"
-                        underline="none"
-                    >
-                      More Info
-                    </Link>
-                  </Box>
+                  <Grid item xs={12} sm={4} key={index}>
+                    <Box sx={{ textAlign: "center" }}>
+                      <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                        {series.name}
+                      </Typography>
+                      <Link variant="body2" underline="none">
+                        More Info
+                      </Link>
+                    </Box>
+                  </Grid>
                 ))}
-              </Box>
+              </Grid>
               <Divider sx={{ my: 2 }} />
             </>
           )}
-          {/* Stories */}
+
           {storiesList.length > 0 && (
             <>
               <Chip label="Stories" color="success" sx={{ mb: 1 }} />
-              <Box display="flex" justifyContent="space-between" sx={{ mb: 2 }}>
+              <Grid container spacing={2} sx={{ mb: 2 }}>
                 {storiesList.map((story, index) => (
-                  <Box key={index} sx={{ flex: 1, textAlign: "center" }}>
-                    <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                      {story.name}
-                    </Typography>
-                    <Link
-                      variant="body2"
-                        underline="none"
-                    >
-                      More Info
-                    </Link>
-                  </Box>
+                  <Grid item xs={12} sm={4} key={index}>
+                    <Box sx={{ textAlign: "center" }}>
+                      <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                        {story.name}
+                      </Typography>
+                      <Link variant="body2" underline="none">
+                        More Info
+                      </Link>
+                    </Box>
+                  </Grid>
                 ))}
-              </Box>
+              </Grid>
             </>
           )}
         </CardContent>
